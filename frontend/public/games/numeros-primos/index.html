@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Mathematics Game - Prime Numbers Jungle Quest with smooth physics, camera scrolling, 5 levels, and auto-save.">
+  <title>Juegos matemáticos - Números primos</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Outfit:wght@400;600;800&family=Press+Start+2P&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body tabindex="0">
+
+  <!-- Background Ambient Glow & Particles -->
+  <div class="jungle-bg-ambient"></div>
+
+  <!-- Main Game Launcher View / Modal Container (Starts Full Screen) -->
+  <div id="game-modal-overlay" class="modal-overlay" role="dialog" aria-modal="true" aria-label="Jungle Math Game View">
+    
+    <div id="game-window" class="game-window">
+
+      <!-- Window Top Bar Header -->
+      <header class="game-header">
+        <div class="game-brand">
+          <span class="jungle-leaf-icon">🌿</span>
+          <span class="header-title" id="main-header-title">Aventura de números primos</span>
+        </div>
+
+        <div class="header-stats">
+          <div class="stat-pill score-pill">
+            <span class="stat-icon">⭐</span>
+            <span class="stat-label">Score:</span>
+            <span id="hud-score-val" class="stat-value">0</span>
+          </div>
+          <div class="stat-pill level-pill">
+            <span class="stat-icon">🗺️</span>
+            <span id="hud-level-title" class="stat-value">Jungle Map</span>
+          </div>
+          <div class="stat-pill highscore-pill">
+            <span class="stat-icon">🏆</span>
+            <span class="stat-label">Best:</span>
+            <span id="hud-highscore-val" class="stat-value">0</span>
+          </div>
+        </div>
+
+        <div class="header-actions">
+          <button id="audio-toggle-btn" class="icon-btn" title="Toggle Sound" aria-label="Toggle Sound">
+            <span id="audio-icon">🔊</span>
+          </button>
+          <button id="fullscreen-toggle-btn" class="icon-btn" title="Toggle Fullscreen" aria-label="Toggle Fullscreen">
+            <span>⛶</span>
+          </button>
+          <button id="close-game-btn" class="close-btn" title="Close Game View" aria-label="Close Game">
+            <span>✕ Cerrar</span>
+          </button>
+        </div>
+      </header>
+
+      <!-- Canvas Viewport Wrapper -->
+      <div id="canvas-container" class="canvas-container">
+        <canvas id="game-canvas" width="1024" height="576" tabindex="1"></canvas>
+
+        <!-- HTML OVERLAY VIEWS -->
+
+        <!-- 1. TITLE SCREEN OVERLAY -->
+        <div id="title-screen-overlay" class="game-overlay title-overlay active">
+          <div class="title-card">
+            <div class="title-badge">JUEGOS MATEMÁTICOS</div>
+            <h1 class="main-title">Aventura de números primos</h1>
+            <p class="title-subtitle">¡Explora la selva y domina los números primos!</p>
+
+            <div class="title-character-preview">
+              <div class="char-avatar-box">
+                <canvas id="char-preview-canvas" width="120" height="120"></canvas>
+              </div>
+              <p class="char-label">Explorer Adventurer (Placeholder Character)</p>
+            </div>
+
+            <div class="title-actions">
+              <button id="start-game-btn" class="btn btn-primary pulse">
+                <span class="btn-icon">🎮</span> Jugar
+              </button>
+              <button id="how-to-play-btn" class="btn btn-secondary">
+                <span class="btn-icon">📜</span> Cómo jugar
+              </button>
+              <button id="reset-progress-btn" class="btn btn-danger-outline" title="Reset Saved Data">
+                <span class="btn-icon">🔄</span> Restablecer progreso
+              </button>
+            </div>
+
+            <div class="saved-progress-status" id="saved-status-badge">
+              <span>💾 Tu progreso se guarda automáticamente hasta que cierres el juego</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. HOW TO PLAY MODAL -->
+        <div id="instructions-overlay" class="game-overlay modal-inner-overlay hidden">
+          <div class="modal-card">
+            <h2>📜 Controles y reglas de juego</h2>
+            <div class="instructions-content">
+              <div class="instruction-row">
+                <div class="key-badge-group">
+                  <span class="key-cap">➡️ Tecla derecha</span>
+                </div>
+                <p>Mueve el personaje continuamente hacia la derecha mientras se presiona.</p>
+              </div>
+              <div class="instruction-row">
+                <div class="key-badge-group">
+                  <span class="key-cap">⬅️ Tecla izquierda</span>
+                </div>
+                <p>Mueve el personaje continuamente hacia la izquierda mientras se presiona.</p>
+              </div>
+              <div class="instruction-row">
+                <div class="key-badge-group">
+                  <span class="key-cap">⬆️ Tecla arriba</span>
+                </div>
+                <p>Salta naturalmente con gravedad (sin salto infinito en el aire).</p>
+              </div>
+              <div class="instruction-row">
+                <div class="key-badge-group">
+                  <span class="key-cap">↵ Llave de entrada</span>
+                </div>
+                <p>Entrar a la puerta del nivel seleccionado cuando estés posicionado en la entrada.</p>
+              </div>
+              <div class="instruction-row scoring-rules">
+                <h3>⭐ Sistema de Puntuación:</h3>
+                <ul>
+                  <li><span class="score-plus">+10 puntos</span> para las respuestas correctas y obstáculos primos.</li>
+                  <li><span class="score-minus">−5 puntos</span> para las respuestas incorrectas.</li>
+                </ul>
+              </div>
+            </div>
+            <button id="close-instructions-btn" class="btn btn-primary">Juguemos!</button>
+          </div>
+        </div>
+
+        <!-- 3. INTERACTIVE MATH QUESTION MODAL -->
+        <div id="math-puzzle-overlay" class="game-overlay math-puzzle-overlay hidden">
+          <div class="puzzle-card">
+            <div class="puzzle-header">
+              <span id="puzzle-level-badge" class="puzzle-badge">Level 1 - Exercise</span>
+              <div class="puzzle-timer" id="puzzle-timer-box">⏱️ <span id="puzzle-timer-val">40</span>s</div>
+            </div>
+
+            <div class="puzzle-body">
+              <h3 id="puzzle-question-text" class="question-text">Is 17 a Prime Number?</h3>
+              <p id="puzzle-hint-text" class="hint-text">Hint: Check if 17 can be divided evenly by any number other than 1 and 17.</p>
+
+              <div id="puzzle-options-container" class="options-grid">
+                <!-- Option buttons dynamically generated -->
+              </div>
+            </div>
+
+            <div class="puzzle-feedback" id="puzzle-feedback-msg"></div>
+          </div>
+        </div>
+
+        <!-- 4. LEVEL COMPLETE SUMMARY OVERLAY -->
+        <div id="level-summary-overlay" class="game-overlay summary-overlay hidden">
+          <div class="summary-card">
+            <div id="summary-icon" class="summary-icon">🏆</div>
+            <h2 id="summary-title" class="summary-title">Nivel completado!</h2>
+            <div id="summary-stars" class="star-rating">⭐⭐⭐</div>
+
+            <div class="summary-stats">
+              <div class="summary-stat-item">
+                <span>Puntaje obtenido:</span>
+                <strong id="summary-score-earned">+0</strong>
+              </div>
+              <div class="summary-stat-item">
+                <span>Puntaje total:</span>
+                <strong id="summary-total-score">0</strong>
+              </div>
+              <div class="summary-stat-item">
+                <span>Precisión:</span>
+                <strong id="summary-accuracy">100%</strong>
+              </div>
+            </div>
+
+            <div class="summary-actions">
+              <button id="next-level-btn" class="btn btn-primary">
+                <span>➡️ Siguiente Nivel</span>
+              </button>
+              <button id="return-map-btn" class="btn btn-secondary">
+                <span>🗺️ Regresar al Mapa</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Controls & HUD Bottom Bar -->
+      <footer class="game-footer">
+        <div class="controls-guide">
+          <span class="guide-title">Controles:</span>
+          <span class="control-key"><kbd>←</kbd> Izquierda</span>
+          <span class="control-key"><kbd>→</kbd> Derecha</span>
+          <span class="control-key"><kbd>↑</kbd> Saltar</span>
+          <span class="control-key"><kbd>Enter</kbd> Entrar al Nivel</span>
+        </div>
+
+        <div id="map-prompt-badge" class="map-prompt hidden">
+          <span>✨ Para jugar ubícate en la entrada del nivel y presiona <kbd>Enter</kbd> </span>
+        </div>
+
+        <div class="fullscreen-tip">
+          <span>Haz click fuera de la imagen o dá click en <button id="footer-close-btn" class="inline-close-btn">Cerrar</button> para salir de la pantalla completa</span>
+        </div>
+      </footer>
+
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
