@@ -1,8 +1,23 @@
 import { Link } from 'react-router-dom'
 import { ArrowLeft, Check, Gamepad2, Sparkles } from 'lucide-react'
-import { localGames, primeNumbersGame } from '../../data/localGames'
+import { localGames } from '../../data/localGames'
 
-export default function LocalGameDetail() {
+interface LocalGameDetailProps {
+  slug: string
+}
+
+export default function LocalGameDetail({ slug }: LocalGameDetailProps) {
+  const selectedGame = localGames.find((game) => game.slug === slug)
+
+  if (!selectedGame) {
+    return (
+      <div className="container-main py-12 text-center">
+        <h1 className="text-2xl font-display font-black text-dark mb-3">Juego no encontrado</h1>
+        <Link to="/juegos" className="btn-primary">Ver todos los juegos</Link>
+      </div>
+    )
+  }
+
   return (
     <div className="py-4 sm:py-6">
       <div className="container-main">
@@ -17,9 +32,9 @@ export default function LocalGameDetail() {
 
         <div className="mb-5">
           <h1 className="text-2xl sm:text-3xl font-display font-black text-dark mb-2">
-            {primeNumbersGame.title}
+            {selectedGame.title}
           </h1>
-          <p className="text-gray-600">{primeNumbersGame.description}</p>
+          <p className="text-gray-600">{selectedGame.description}</p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-[220px_minmax(0,1fr)] gap-5 items-start">
@@ -37,7 +52,7 @@ export default function LocalGameDetail() {
             <nav aria-label="Seleccionar juego">
               <ul className="space-y-2">
                 {localGames.map((game) => {
-                  const isSelected = game.slug === primeNumbersGame.slug
+                  const isSelected = game.slug === selectedGame.slug
 
                   return (
                     <li key={game.id}>
@@ -67,14 +82,14 @@ export default function LocalGameDetail() {
 
             <div className="mt-4 flex items-start gap-2 rounded-2xl bg-secondary/10 p-3 text-sm text-gray-600">
               <Sparkles className="mt-0.5 h-4 w-4 flex-shrink-0 text-secondary" aria-hidden="true" />
-              <p>Este es el juego disponible por ahora. Los demás se añadirán aquí al integrarlos.</p>
+              <p>Estos juegos están disponibles gratis. Se añadirán más a medida que se integren.</p>
             </div>
           </aside>
 
           <div className="min-w-0 overflow-hidden rounded-3xl bg-dark shadow-xl">
             <iframe
-              src={primeNumbersGame.embedUrlDemo}
-              title={primeNumbersGame.title}
+              src={selectedGame.embedUrlDemo}
+              title={selectedGame.title}
               className="block h-[min(66vh,760px)] min-h-[420px] w-full border-0"
               allow="fullscreen; autoplay"
             />

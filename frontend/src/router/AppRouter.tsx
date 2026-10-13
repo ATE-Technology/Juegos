@@ -45,7 +45,8 @@ export default function AppRouter() {
         <Route element={<MainLayout />}>
           <Route path="/" element={<Home />} />
           <Route path="/juegos" element={<Games />} />
-          <Route path="/juegos/matematicas-divertidas" element={<LocalGameDetail />} />
+          <Route path="/juegos/matematicas-divertidas" element={<LocalGameDetail slug="matematicas-divertidas" />} />
+          <Route path="/juegos/divisiones" element={<LocalGameDetail slug="divisiones" />} />
           <Route path="/juegos/:slug" element={<GameDetail />} />
           <Route path="/videos" element={<Videos />} />
           <Route path="/articulos" element={<Articles />} />
