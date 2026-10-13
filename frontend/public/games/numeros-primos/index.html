@@ -61,6 +61,29 @@
       <div id="canvas-container" class="canvas-container">
         <canvas id="game-canvas" width="1024" height="576" tabindex="1"></canvas>
 
+        <div class="touch-controls" role="group" aria-label="Controles táctiles">
+          <div class="touch-control-group" role="group" aria-label="Movimiento">
+            <button class="touch-control-button" type="button" data-touch-control="left" aria-label="Mover a la izquierda">
+              <span aria-hidden="true">◀</span>
+              <span>Izquierda</span>
+            </button>
+            <button class="touch-control-button" type="button" data-touch-control="right" aria-label="Mover a la derecha">
+              <span aria-hidden="true">▶</span>
+              <span>Derecha</span>
+            </button>
+          </div>
+          <div class="touch-control-group" role="group" aria-label="Acciones">
+            <button class="touch-control-button" type="button" data-touch-control="jump" aria-label="Saltar">
+              <span aria-hidden="true">⬆</span>
+              <span>Saltar</span>
+            </button>
+            <button class="touch-control-button touch-enter-button" type="button" data-touch-control="enter" aria-label="Entrar al nivel">
+              <span aria-hidden="true">↵</span>
+              <span>Entrar</span>
+            </button>
+          </div>
+        </div>
+
         <!-- HTML OVERLAY VIEWS -->
 
         <!-- 1. TITLE SCREEN OVERLAY -->
@@ -102,25 +125,25 @@
             <div class="instructions-content">
               <div class="instruction-row">
                 <div class="key-badge-group">
-                  <span class="key-cap">➡️ Tecla derecha</span>
+                  <span class="key-cap">➡️ Tecla o botón derecho</span>
                 </div>
-                <p>Mueve el personaje continuamente hacia la derecha mientras se presiona.</p>
+                <p>Mueve el personaje continuamente hacia la derecha mientras se mantiene presionado.</p>
               </div>
               <div class="instruction-row">
                 <div class="key-badge-group">
-                  <span class="key-cap">⬅️ Tecla izquierda</span>
+                  <span class="key-cap">⬅️ Tecla o botón izquierdo</span>
                 </div>
-                <p>Mueve el personaje continuamente hacia la izquierda mientras se presiona.</p>
+                <p>Mueve el personaje continuamente hacia la izquierda mientras se mantiene presionado.</p>
               </div>
               <div class="instruction-row">
                 <div class="key-badge-group">
-                  <span class="key-cap">⬆️ Tecla arriba</span>
+                  <span class="key-cap">⬆️ Tecla arriba o botón Saltar</span>
                 </div>
                 <p>Salta naturalmente con gravedad (sin salto infinito en el aire).</p>
               </div>
               <div class="instruction-row">
                 <div class="key-badge-group">
-                  <span class="key-cap">↵ Llave de entrada</span>
+                  <span class="key-cap">↵ Enter o botón Entrar al nivel</span>
                 </div>
                 <p>Entrar a la puerta del nivel seleccionado cuando estés posicionado en la entrada.</p>
               </div>
@@ -203,7 +226,7 @@
         </div>
 
         <div id="map-prompt-badge" class="map-prompt hidden">
-          <span>✨ Para jugar ubícate en la entrada del nivel y presiona <kbd>Enter</kbd> </span>
+          <span>✨ Ubícate en la entrada y toca Entrar (o presiona <kbd>Enter</kbd>).</span>
         </div>
 
         <div class="fullscreen-tip">

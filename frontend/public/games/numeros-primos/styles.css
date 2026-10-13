@@ -221,6 +221,63 @@ canvas#game-canvas {
   display: block;
 }
 
+.touch-controls {
+  display: none;
+  position: absolute;
+  z-index: 5;
+  right: 0;
+  bottom: 0.75rem;
+  left: 0;
+  align-items: flex-end;
+  justify-content: space-between;
+  padding: 0 0.75rem;
+  pointer-events: none;
+  touch-action: none;
+}
+
+.touch-control-group {
+  display: flex;
+  align-items: flex-end;
+  gap: 0.35rem;
+  pointer-events: auto;
+}
+
+.touch-control-button {
+  display: flex;
+  min-width: 54px;
+  height: 58px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.1rem;
+  padding: 0.25rem;
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  border-radius: 14px;
+  background: rgba(6, 21, 12, 0.78);
+  color: #fff;
+  font: 700 0.62rem var(--font-body);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: none;
+  user-select: none;
+}
+
+.touch-control-button > span:first-child {
+  font-size: 1.2rem;
+  line-height: 1;
+}
+
+.touch-enter-button {
+  min-width: 64px;
+  background: rgba(255, 159, 28, 0.88);
+  color: #1a0f00;
+}
+
+.touch-control-button:active {
+  background: var(--jungle-accent);
+  transform: scale(0.95);
+}
+
 /* Overlays (Title Screen, Math Puzzle, Summary) */
 .game-overlay {
   position: absolute;
@@ -709,7 +766,10 @@ kbd {
 }
 
 /* Responsive adjustments */
-@media (max-width: 768px) {
+@media (pointer: coarse), (max-width: 768px) {
+  .touch-controls {
+    display: flex;
+  }
   .game-header {
     flex-wrap: wrap;
     gap: 0.5rem;
@@ -727,6 +787,13 @@ kbd {
   }
   .controls-guide {
     display: none;
+  }
+  .fullscreen-tip {
+    display: none;
+  }
+  .title-card {
+    max-height: calc(100% - 1rem);
+    overflow-y: auto;
   }
 }
 

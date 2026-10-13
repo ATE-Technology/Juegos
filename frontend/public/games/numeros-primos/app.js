@@ -526,6 +526,13 @@
 
   // --- KEYBOARD CONTROLLER & MULTI-KEY STATE TRACKING ---
   const keys = { Left: false, Right: false, Up: false, Enter: false };
+  const keyboardKeys = { Left: false, Right: false, Up: false };
+  const touchPointers = {
+    Left: new Set(),
+    Right: new Set(),
+    Up: new Set()
+  };
+  const touchPointerKeys = new Map();
 
   function updatePlayerVelocity() {
     let dx = 0;
@@ -540,6 +547,56 @@
     player.vx = dx;
   }
 
+  function syncMovementInputs() {
+    keys.Left = keyboardKeys.Left || touchPointers.Left.size > 0;
+    keys.Right = keyboardKeys.Right || touchPointers.Right.size > 0;
+    keys.Up = keyboardKeys.Up || touchPointers.Up.size > 0;
+    updatePlayerVelocity();
+  }
+
+  function startJump() {
+    if (player.isGrounded && !keys.Up) {
+      player.vy = player.jumpPower;
+      player.isGrounded = false;
+      audio.playJump();
+    }
+  }
+
+  document.querySelectorAll('[data-touch-control]').forEach((button) => {
+    const control = button.dataset.touchControl;
+    const key = { left: 'Left', right: 'Right', jump: 'Up' }[control];
+
+    button.addEventListener('pointerdown', (event) => {
+      event.preventDefault();
+
+      if (control === 'enter') {
+        handleEnterKeyPress();
+        return;
+      }
+
+      if (!key) return;
+
+      touchPointers[key].add(event.pointerId);
+      touchPointerKeys.set(event.pointerId, key);
+      if (key === 'Up') startJump();
+      syncMovementInputs();
+      button.setPointerCapture(event.pointerId);
+    });
+
+    const releasePointer = (event) => {
+      const pressedKey = touchPointerKeys.get(event.pointerId);
+      if (!pressedKey) return;
+
+      touchPointers[pressedKey].delete(event.pointerId);
+      touchPointerKeys.delete(event.pointerId);
+      syncMovementInputs();
+    };
+
+    button.addEventListener('pointerup', releasePointer);
+    button.addEventListener('pointercancel', releasePointer);
+    button.addEventListener('lostpointercapture', releasePointer);
+  });
+
   window.addEventListener('keydown', (e) => {
     // Prevent default scroll behavior for arrow keys & space
     if (['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', ' ', 'Enter'].includes(e.key)) {
@@ -547,21 +604,17 @@
     }
 
     if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') {
-      keys.Left = true;
-      updatePlayerVelocity();
+      keyboardKeys.Left = true;
+      syncMovementInputs();
     }
     if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') {
-      keys.Right = true;
-      updatePlayerVelocity();
+      keyboardKeys.Right = true;
+      syncMovementInputs();
     }
     if (e.key === 'ArrowUp' || e.key === 'w' || e.key === 'W' || e.key === ' ') {
-      // Jump only if grounded (No infinite airborne jumping!)
-      if (player.isGrounded && !keys.Up) {
-        player.vy = player.jumpPower;
-        player.isGrounded = false;
-        audio.playJump();
-      }
-      keys.Up = true;
+      startJump();
+      keyboardKeys.Up = true;
+      syncMovementInputs();
     }
     if (e.key === 'Enter') {
       if (!keys.Enter) {
@@ -573,15 +626,16 @@
 
   window.addEventListener('keyup', (e) => {
     if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') {
-      keys.Left = false;
-      updatePlayerVelocity();
+      keyboardKeys.Left = false;
+      syncMovementInputs();
     }
     if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') {
-      keys.Right = false;
-      updatePlayerVelocity();
+      keyboardKeys.Right = false;
+      syncMovementInputs();
     }
     if (e.key === 'ArrowUp' || e.key === 'w' || e.key === 'W' || e.key === ' ') {
-      keys.Up = false;
+      keyboardKeys.Up = false;
+      syncMovementInputs();
     }
     if (e.key === 'Enter') {
       keys.Enter = false;
