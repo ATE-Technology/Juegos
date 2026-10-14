@@ -47,6 +47,7 @@ export default function AppRouter() {
           <Route path="/juegos" element={<Games />} />
           <Route path="/juegos/matematicas-divertidas" element={<LocalGameDetail slug="matematicas-divertidas" />} />
           <Route path="/juegos/divisiones" element={<LocalGameDetail slug="divisiones" />} />
+          <Route path="/juegos/multiplicaciones-en-la-selva" element={<LocalGameDetail slug="multiplicaciones-en-la-selva" />} />
           <Route path="/juegos/:slug" element={<GameDetail />} />
           <Route path="/videos" element={<Videos />} />
           <Route path="/articulos" element={<Articles />} />
