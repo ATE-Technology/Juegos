@@ -127,7 +127,7 @@ export default function Games() {
         {/* Resultados */}
         {isError && (
           <div className="text-center py-6">
-            <p className="text-gray-500">No se pudieron cargar otros juegos. Puedes jugar Matemáticas divertidas mientras tanto.</p>
+            <p className="text-gray-500">No se pudieron cargar otros juegos. Los juegos disponibles gratis siguen listos para jugar.</p>
           </div>
         )}
         {isLoading && (

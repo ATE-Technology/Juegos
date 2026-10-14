@@ -4,21 +4,21 @@ import { Link } from 'react-router-dom'
 
 // Este contenido se actualizará desde el panel admin cuando esté disponible
 const teacher = {
-  name: 'Nombre de la Docente',
-  title: 'Docente Especialista en Educación Primaria',
-  bio: 'Soy una docente apasionada por la innovación educativa con más de 10 años de experiencia trabajando con niños de preescolar y primaria. Creo firmemente que cada niño tiene un potencial único que florece cuando se le brinda el ambiente y las herramientas adecuadas para aprender.',
-  bio2: 'Mi enfoque pedagógico combina el juego como herramienta de aprendizaje con estrategias basadas en evidencia para garantizar que cada niño no solo aprenda los contenidos académicos, sino que también desarrolle habilidades del siglo XXI como el pensamiento crítico, la creatividad y la colaboración.',
+  name: 'Diana Torres Suárez',
+  title: 'Docente en pedagogía infantil - Especialista en diseño de ambientes de aprendizaje',
+  bio: 'Me apasiona acompañar a los niños en sus procesos educativos y crear experiencias que les permitan aprender de una manera amena, creativa y divertida.',
+  bio2: 'Considero que cada niño tiene habilidades, intereses y ritmos de aprendizaje diferentes. Por eso, mi trabajo busca brindar un acompañamiento personalizado, respetuoso y cercano.',
+  bio3: 'Mi propósito es ayudar a cada niño a fortalecer sus conocimientos, desarrollar nuevas habilidades y descubrir que aprender puede ser divertido.',
   specialties: [
-    'Matemáticas para educación inicial y primaria',
+    'Matemáticas para educación inicial',
     'Desarrollo del lenguaje y lecto-escritura',
     'Aprendizaje basado en el juego',
-    'Educación inclusiva',
     'Uso pedagógico de tecnología',
   ],
   achievements: [
     { icon: '🎓', text: 'Licenciatura en Educación Básica Primaria' },
     { icon: '📚', text: 'Especialización en Pedagogía Infantil' },
-    { icon: '🏆', text: 'Más de 10 años de experiencia docente' },
+    { icon: '🏆', text: 'Más de 5 años de experiencia docente' },
     { icon: '🎮', text: 'Creadora de materiales educativos digitales' },
   ],
 }
@@ -68,10 +68,11 @@ export default function TeacherProfile() {
           >
             <div className="bg-white rounded-3xl shadow-card p-8">
               <h2 className="text-2xl font-display font-black text-dark mb-5 flex items-center gap-2">
-                <Heart className="w-6 h-6 text-secondary" /> Mi historia
+                <Heart className="w-6 h-6 text-secondary" /> Sobre mí
               </h2>
               <p className="text-gray-600 leading-relaxed mb-4">{teacher.bio}</p>
-              <p className="text-gray-600 leading-relaxed">{teacher.bio2}</p>
+              <p className="text-gray-600 leading-relaxed mb-4">{teacher.bio2}</p>
+              <p className="text-gray-600 leading-relaxed">{teacher.bio3}</p>
             </div>
 
             {/* Especialidades */}
@@ -87,6 +88,30 @@ export default function TeacherProfile() {
                   </li>
                 ))}
               </ul>
+            </div>
+
+            {/* Metodología */}
+            <div className="bg-white rounded-3xl shadow-card p-8">
+              <h2 className="text-2xl font-display font-black text-dark mb-3">
+                🌱 Nuestra metodología
+              </h2>
+              <h3 className="text-lg font-display font-bold text-primary mb-3">
+                Aprender a través del juego
+              </h3>
+              <p className="text-gray-600 leading-relaxed mb-5">
+                Nuestra metodología combina <strong>pedagogía, creatividad, juego y herramientas digitales</strong> para hacer que cada encuentro sea una oportunidad para aprender.
+              </p>
+              <p className="text-gray-700 font-semibold mb-3">Trabajamos teniendo en cuenta:</p>
+              <ul className="space-y-3 mb-5" aria-label="Principios de nuestra metodología">
+                <li className="flex items-start gap-3 text-gray-700"><span aria-hidden="true">💛</span> Las necesidades de cada niño.</li>
+                <li className="flex items-start gap-3 text-gray-700"><span aria-hidden="true">🌱</span> Su ritmo de aprendizaje.</li>
+                <li className="flex items-start gap-3 text-gray-700"><span aria-hidden="true">🎯</span> Sus objetivos de aprendizaje.</li>
+                <li className="flex items-start gap-3 text-gray-700"><span aria-hidden="true">🎨</span> Sus intereses.</li>
+                <li className="flex items-start gap-3 text-gray-700"><span aria-hidden="true">🧩</span> Sus habilidades y fortalezas.</li>
+              </ul>
+              <p className="text-gray-600 leading-relaxed">
+                Buscamos que los niños sean protagonistas de su propio aprendizaje.
+              </p>
             </div>
           </motion.div>
 

@@ -18,7 +18,7 @@ export const divisionsGame: Game = {
   id: 'local-basic-divisions-jungle',
   title: 'Aventura de divisiones',
   slug: 'divisiones',
-  description: 'Explora la selva y practica las divisiones básicas con desafíos interactivos.',
+  description: 'Recorre la selva, supera obstáculos y resuelve divisiones en cinco tableros progresivos.',
   category: 'Matemáticas',
   level: 'primaria',
   coverUrl: '',

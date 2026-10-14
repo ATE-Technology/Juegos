@@ -170,8 +170,8 @@ export default function Contact() {
                   </div>
                   <div>
                     <p className="font-display font-bold text-dark text-sm">Correo electrónico</p>
-                    <a href="mailto:contacto@juegoseducativos.com" className="text-primary text-sm hover:underline">
-                      contacto@juegoseducativos.com
+                    <a href="mailto:explorandoyaprendiendo.bog@gmail.com" className="text-primary text-sm hover:underline">
+                      explorandoyaprendiendo.bog@gmail.com
                     </a>
                   </div>
                 </div>
@@ -182,8 +182,8 @@ export default function Contact() {
                   </div>
                   <div>
                     <p className="font-display font-bold text-dark text-sm">WhatsApp</p>
-                    <a href="https://wa.me/573000000000" target="_blank" rel="noopener noreferrer" className="text-secondary text-sm hover:underline">
-                      +57 300 000 0000
+                    <a href="https://wa.me/573134017532" target="_blank" rel="noopener noreferrer" className="text-secondary text-sm hover:underline">
+                      +57 313 401 7532
                     </a>
                   </div>
                 </div>
