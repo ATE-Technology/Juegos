@@ -7,7 +7,7 @@ import { articleService } from '../../services/articleService'
 import GameCard from '../../components/games/GameCard'
 import ArticleCard from '../../components/articles/ArticleCard'
 import LoadingSpinner from '../../components/common/LoadingSpinner'
-import { primeNumbersGame } from '../../data/localGames'
+import { localGames } from '../../data/localGames'
 
 const fadeInUp = {
   initial: { opacity: 0, y: 30 },
@@ -219,23 +219,25 @@ export default function Home() {
           )}
           {gamesData?.data && gamesData.data.length > 0 ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              <GameCard game={primeNumbersGame} />
+              {localGames.map((game) => <GameCard key={game.id} game={game} />)}
               {gamesData.data.map((game, i) => (
-                <motion.div
-                  key={game.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: i * 0.08 }}
-                >
-                  <GameCard game={game} />
-                </motion.div>
+                !localGames.some((localGame) => localGame.slug === game.slug) && (
+                  <motion.div
+                    key={game.id}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: i * 0.08 }}
+                  >
+                    <GameCard game={game} />
+                  </motion.div>
+                )
               ))}
             </div>
           ) : (
             /* Estado vacío — útil durante desarrollo antes de tener datos reales */
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              <GameCard game={primeNumbersGame} />
+              {localGames.map((game) => <GameCard key={game.id} game={game} />)}
               {[
                 { emoji: '📖', title: 'Lectura Aventurera', category: 'Lenguaje', level: 'preescolar', premium: false },
                 { emoji: '🔬', title: 'Ciencias Exploradora', category: 'Ciencias', level: 'primaria', premium: true },

@@ -18,7 +18,7 @@ export const divisionsGame: Game = {
   id: 'local-basic-divisions-jungle',
   title: 'Aventura de divisiones',
   slug: 'divisiones',
-  description: 'Explora la selva y practica las divisiones básicas con desafíos interactivos.',
+  description: 'Recorre la selva, supera obstáculos y resuelve divisiones en cinco tableros progresivos.',
   category: 'Matemáticas',
   level: 'primaria',
   coverUrl: '',
@@ -28,4 +28,18 @@ export const divisionsGame: Game = {
   createdAt: '',
 }
 
-export const localGames = [primeNumbersGame, divisionsGame]
+export const jungleMultiplicationGame: Game = {
+  id: 'local-jungle-multiplications',
+  title: 'Aventura de multiplicaciones',
+  slug: 'multiplicaciones-en-la-selva',
+  description: 'Explora la selva, supera obstáculos y practica las tablas de multiplicar en cinco tableros.',
+  category: 'Matemáticas',
+  level: 'primaria',
+  coverUrl: '',
+  embedUrlDemo: '/games/multiplicaciones-selva/index.html',
+  isActive: true,
+  isPremium: false,
+  createdAt: '',
+}
+
+export const localGames = [primeNumbersGame, divisionsGame, jungleMultiplicationGame]

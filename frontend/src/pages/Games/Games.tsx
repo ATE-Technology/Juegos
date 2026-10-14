@@ -5,7 +5,7 @@ import { Search, Filter, Gamepad2 } from 'lucide-react'
 import { gameService } from '../../services/gameService'
 import GameCard from '../../components/games/GameCard'
 import LoadingSpinner from '../../components/common/LoadingSpinner'
-import { primeNumbersGame } from '../../data/localGames'
+import { localGames } from '../../data/localGames'
 
 const categories = ['Todas', 'Matemáticas', 'Lenguaje', 'Ciencias', 'Sociales', 'Arte', 'Tecnología']
 const levels = ['Todos', 'preescolar', 'primaria', 'secundaria']
@@ -32,8 +32,8 @@ export default function Games() {
   })
 
   const games = [
-    ...(data?.data ?? []).filter((game) => game.slug !== primeNumbersGame.slug),
-    ...(page === 1 ? [primeNumbersGame] : []),
+    ...(data?.data ?? []).filter((game) => !localGames.some((localGame) => localGame.slug === game.slug)),
+    ...(page === 1 ? localGames : []),
   ]
   const filteredGames = games.filter((game) => {
     const matchesSearch = search === ''
@@ -127,7 +127,7 @@ export default function Games() {
         {/* Resultados */}
         {isError && (
           <div className="text-center py-6">
-            <p className="text-gray-500">No se pudieron cargar otros juegos. Puedes jugar Matemáticas divertidas mientras tanto.</p>
+            <p className="text-gray-500">No se pudieron cargar otros juegos. Los juegos disponibles gratis siguen listos para jugar.</p>
           </div>
         )}
         {isLoading && (
