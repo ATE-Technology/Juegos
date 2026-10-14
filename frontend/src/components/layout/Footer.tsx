@@ -111,6 +111,16 @@ export default function Footer() {
           </p>
           <p className="text-white/50 text-sm flex items-center gap-1">
             Hecho con <Heart className="w-3.5 h-3.5 text-secondary fill-secondary" aria-hidden="true" /> en Colombia
+            <span className="mx-1" aria-hidden="true">·</span>
+            Desarrollado por{' '}
+            <a
+              href="https://ate-technology.vercel.app"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-primary-300 hover:text-primary-200 underline"
+            >
+              ATE Technology
+            </a>
           </p>
         </div>
       </div>

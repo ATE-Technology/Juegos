@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="description" content="Juego Educativo de Matemáticas - Aventura de Multiplicaciones en la Selva con física 2D, mapa interactivo, obstáculos y 5 niveles progresivos.">
+  <title>Aventura en la Selva - Desafío de Multiplicaciones</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Outfit:wght@400;600;800&family=Press+Start+2P&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css?v=multiplicaciones_v2">
+</head>
+<body tabindex="0">
+
+  <!-- Fondo ambiental de selva -->
+  <div class="jungle-ambient-backdrop"></div>
+
+  <!-- Contenedor del Juego -->
+  <div id="game-app-container" class="game-app-container">
+
+    <div id="game-window" class="game-window">
+
+      <!-- Header / HUD superior -->
+      <header class="game-header">
+        <div class="game-brand">
+          <span class="brand-icon">🌿</span>
+          <div class="brand-text">
+            <span class="game-title-hud">Multiplicaciones en la Selva</span>
+            <span class="game-subtitle-hud" id="hud-board-name">Mapa del Explorador</span>
+          </div>
+        </div>
+
+        <div class="hud-stats-group">
+          <!-- Puntos -->
+          <div class="stat-badge score-badge" title="Puntuación acumulada">
+            <span class="badge-icon">⭐</span>
+            <div class="badge-content">
+              <span class="badge-label">PUNTOS</span>
+              <span id="hud-score-val" class="badge-value">0</span>
+            </div>
+          </div>
+
+          <!-- Récord -->
+          <div class="stat-badge record-badge" title="Mejor récord">
+            <span class="badge-icon">🏆</span>
+            <div class="badge-content">
+              <span class="badge-label">RÉCORD</span>
+              <span id="hud-highscore-val" class="badge-value">0</span>
+            </div>
+          </div>
+
+          <!-- Tablero actual -->
+          <div class="stat-badge level-badge" title="Tablero / Nivel">
+            <span class="badge-icon">🗺️</span>
+            <div class="badge-content">
+              <span class="badge-label">UBICACIÓN</span>
+              <span id="hud-location-val" class="badge-value">Selva Central</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Acciones del header -->
+        <div class="header-actions">
+          <button id="map-return-top-btn" class="icon-btn hidden" title="Volver al Mapa" aria-label="Volver al Mapa">
+            <span>🗺️</span>
+          </button>
+          <button id="audio-toggle-btn" class="icon-btn" title="Sonido activado / silenciado" aria-label="Sonido">
+            <span id="audio-icon">🔊</span>
+          </button>
+          <button id="fullscreen-toggle-btn" class="icon-btn" title="Pantalla completa" aria-label="Pantalla completa">
+            <span>⛶</span>
+          </button>
+        </div>
+      </header>
+
+      <!-- Viewport del Canvas y Overlays -->
+      <main id="canvas-container" class="canvas-container">
+        <canvas id="game-canvas" width="1024" height="576" tabindex="1"></canvas>
+
+        <!-- Controles táctiles virtuales para celulares y tablets -->
+        <div id="touch-controls" class="touch-controls" role="group" aria-label="Controles táctiles de la selva">
+          <div class="touch-control-group touch-dpad" role="group" aria-label="Movimiento">
+            <button class="touch-btn touch-btn-move" type="button" data-touch-control="left" aria-label="Mover a la izquierda">
+              <span class="touch-icon">◀</span>
+              <span class="touch-text">Izquierda</span>
+            </button>
+            <button class="touch-btn touch-btn-move" type="button" data-touch-control="right" aria-label="Mover a la derecha">
+              <span class="touch-icon">▶</span>
+              <span class="touch-text">Derecha</span>
+            </button>
+          </div>
+          
+          <div class="touch-control-group touch-actions" role="group" aria-label="Acciones">
+            <button class="touch-btn touch-btn-action touch-jump" type="button" data-touch-control="jump" aria-label="Saltar">
+              <span class="touch-icon">⬆</span>
+              <span class="touch-text">Saltar</span>
+            </button>
+            <button class="touch-btn touch-btn-action touch-enter" type="button" data-touch-control="enter" aria-label="Entrar o Interactuar">
+              <span class="touch-icon">⚡</span>
+              <span class="touch-text">Acción</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- 1. PANTALLA DE TÍTULO / INTRO INICIAL -->
+        <div id="title-screen-overlay" class="game-overlay title-overlay active">
+          <div class="title-card">
+            <div class="title-top-badge">🌿 EXPEDICIÓN MATEMÁTICA 🌿</div>
+            <h1 class="main-title">Aventura de Multiplicaciones</h1>
+            <p class="title-subtitle">¡Explora la selva, supera obstáculos y domina las tablas ancestrales!</p>
+
+            <!-- Previsualización animada del personaje -->
+            <div class="title-character-box">
+              <div class="char-halo">
+                <canvas id="char-preview-canvas" width="120" height="120"></canvas>
+              </div>
+              <div class="char-details">
+                <span class="char-name">Exploradora Maya</span>
+                <span class="char-role">Guía de la Selva Matemática</span>
+              </div>
+            </div>
+
+            <!-- Resumen de los 5 tableros -->
+            <div class="tableros-preview-strip">
+              <div class="tablero-pill" title="Tablas del 2 al 4">1. Semillas (x2-4)</div>
+              <div class="tablero-pill" title="Tablas del 5 al 7">2. Lianas (x5-7)</div>
+              <div class="tablero-pill" title="Tablas del 8 al 10">3. Cascada (x8-10)</div>
+              <div class="tablero-pill" title="Tablas del 11 y 12">4. Templo (x11-12)</div>
+              <div class="tablero-pill gold" title="Desafío Maestro">5. Guardián Solar 👑</div>
+            </div>
+
+            <div class="title-actions">
+              <button id="start-game-btn" class="btn btn-primary pulse">
+                <span class="btn-icon">▶</span> Comenzar Aventura
+              </button>
+              <button id="how-to-play-btn" class="btn btn-secondary">
+                <span class="btn-icon">📜</span> Cómo Jugar
+              </button>
+              <button id="reset-progress-btn" class="btn btn-ghost" title="Restablecer progreso">
+                <span class="btn-icon">🔄</span> Reiniciar
+              </button>
+            </div>
+
+            <div class="progress-info-note">
+              <span>💾 Tu progreso, estrellas y puntuación se guardan automáticamente</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. MODAL CÓMO JUGAR -->
+        <div id="instructions-overlay" class="game-overlay modal-inner-overlay hidden">
+          <div class="modal-card">
+            <div class="modal-header">
+              <h2>📜 Reglas de la Expedición</h2>
+              <button id="close-instructions-x-btn" class="modal-close-x" aria-label="Cerrar modal">&times;</button>
+            </div>
+            
+            <div class="instructions-content">
+              <div class="instruction-item">
+                <div class="inst-icon">🗺️</div>
+                <div class="inst-desc">
+                  <strong>El Mapa de la Selva:</strong>
+                  <p>Muévete por el mapa de la selva para encontrar los <strong>5 Santuarios de Multiplicación</strong>. Ubícate frente a la puerta y pulsa <strong>Entrar</strong>.</p>
+                </div>
+              </div>
+
+              <div class="instruction-item">
+                <div class="inst-icon">🏃‍♂️</div>
+                <div class="inst-desc">
+                  <strong>Paisajes y Obstáculos:</strong>
+                  <p>Dentro de cada tablero encontrarás plataformas, fosos selváticos y <strong>Orbes de Multiplicación (×)</strong>. ¡Salta sobre los obstáculos y tócalos para resolverlos!</p>
+                </div>
+              </div>
+
+              <div class="instruction-item">
+                <div class="inst-icon">⭐</div>
+                <div class="inst-desc">
+                  <strong>Puntuación y Desafío:</strong>
+                  <ul>
+                    <li><span class="txt-plus">+10 a +15 Puntos</span> por responder la multiplicación correctamente.</li>
+                    <li><span class="txt-minus">−5 Puntos</span> si fallas la respuesta.</li>
+                    <li>Desbloquea hasta <strong>3 Estrellas</strong> por cada tablero según tu puntería.</li>
+                  </ul>
+                </div>
+              </div>
+
+              <div class="instruction-item">
+                <div class="inst-icon">🎮</div>
+                <div class="inst-desc">
+                  <strong>Controles:</strong>
+                  <p><strong>Computador:</strong> Flechas <kbd>←</kbd> <kbd>→</kbd> o <kbd>A</kbd> <kbd>D</kbd> para caminar, <kbd>↑</kbd> o <kbd>W</kbd> o <kbd>Espacio</kbd> para saltar, y <kbd>Enter</kbd> para entrar.<br>
+                  <strong>Celular:</strong> Botones táctiles virtuales ergonómicos en pantalla con soporte multi-toque simultáneo.</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="modal-footer">
+              <button id="close-instructions-btn" class="btn btn-primary">
+                <span>¡Entendido, vamos a jugar!</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. MODAL DE PREGUNTAS DE MULTIPLICACIÓN -->
+        <div id="math-puzzle-overlay" class="game-overlay math-puzzle-overlay hidden">
+          <div class="puzzle-card">
+            <div class="puzzle-header">
+              <span id="puzzle-level-badge" class="puzzle-badge">Tablero 1 • Desafío 1/3</span>
+              <div class="puzzle-header-right">
+                <div class="puzzle-timer-badge">
+                  <span>⏱️</span> <span id="puzzle-timer-val">30</span>s
+                </div>
+                <button id="close-puzzle-btn" class="modal-close-x" title="Cerrar pregunta" aria-label="Cerrar pregunta">&times;</button>
+              </div>
+            </div>
+
+            <!-- Representación visual de apoyo pedagógico (grupos / multiplicación) -->
+            <div class="puzzle-visual-hint" id="puzzle-visual-hint">
+              <!-- Creado dinámicamente con puntos/frutas/semillas de selva -->
+            </div>
+
+            <div class="puzzle-body">
+              <div class="question-callout">
+                <span class="question-prefix">Calcula el producto:</span>
+                <h2 id="puzzle-question-text" class="question-expression">6 × 7 = ?</h2>
+              </div>
+              <p id="puzzle-hint-text" class="hint-text">Pista: Suma 6 veces el número 7, o recuerda que 6 × 5 = 30 + 12.</p>
+
+              <div id="puzzle-options-container" class="options-grid">
+                <!-- 4 opciones generadas dinámicamente -->
+              </div>
+            </div>
+
+            <div class="puzzle-feedback" id="puzzle-feedback-msg"></div>
+          </div>
+        </div>
+
+        <!-- 4. MODAL DE TABLERO / NIVEL COMPLETADO -->
+        <div id="level-summary-overlay" class="game-overlay summary-overlay hidden">
+          <div class="summary-card">
+            <div class="summary-crown-icon">🏆</div>
+            <h2 id="summary-title" class="summary-title">¡Tablero Conquistado!</h2>
+            <div id="summary-stars" class="star-rating">⭐⭐⭐</div>
+
+            <p id="summary-congrats" class="summary-congrats">¡Has dominado las multiplicaciones de este territorio selvático!</p>
+
+            <div class="summary-stats-box">
+              <div class="summary-stat-row">
+                <span>Puntos del tablero:</span>
+                <strong id="summary-score-earned" class="stat-highlight">+45</strong>
+              </div>
+              <div class="summary-stat-row">
+                <span>Puntuación total:</span>
+                <strong id="summary-total-score">145</strong>
+              </div>
+              <div class="summary-stat-row">
+                <span>Precisión matemática:</span>
+                <strong id="summary-accuracy">100%</strong>
+              </div>
+            </div>
+
+            <div class="summary-actions">
+              <button id="next-level-btn" class="btn btn-primary">
+                <span>➡️ Siguiente Tablero</span>
+              </button>
+              <button id="return-map-btn" class="btn btn-secondary">
+                <span>🗺️ Volver al Mapa</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </main>
+
+      <!-- Barra inferior (Footer con Guía de Controles) -->
+      <footer class="game-footer">
+        <div class="controls-guide">
+          <span class="guide-title">Controles:</span>
+          <span class="key-help"><kbd>←</kbd><kbd>→</kbd> Mover</span>
+          <span class="key-help"><kbd>↑</kbd> o <kbd>Espacio</kbd> Saltar</span>
+          <span class="key-help"><kbd>Enter</kbd> Entrar al Tablero</span>
+        </div>
+
+        <div id="map-prompt-badge" class="map-prompt-badge hidden">
+          <span>✨ ¡Estás frente a la entrada! Presiona <kbd>Enter</kbd> o pulsa Acción para entrar.</span>
+        </div>
+
+        <div class="footer-extra-links">
+          <button id="footer-how-btn" class="footer-link-btn">Ayuda</button>
+          <button id="footer-restart-btn" class="footer-link-btn">Reiniciar Nivel</button>
+        </div>
+      </footer>
+
+    </div>
+
+  </div>
+
+  <script src="app.js?v=multiplicaciones_v2"></script>
+</body>
+</html>

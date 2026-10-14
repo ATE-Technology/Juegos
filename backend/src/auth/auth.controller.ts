@@ -1,7 +1,8 @@
 import {
   Controller, Post, Get, Delete, Body, Req, Res,
-  UseGuards, HttpCode, HttpStatus, Ip, Throttle
+  UseGuards, HttpCode, HttpStatus, Ip,
 } from '@nestjs/common'
+import { Throttle } from '@nestjs/throttler'
 import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger'
 import { Response, Request } from 'express'
 import { AuthService } from './auth.service'
